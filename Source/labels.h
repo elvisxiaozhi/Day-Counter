@@ -10,6 +10,8 @@ public:
 
 private:
     void mousePressEvent(QMouseEvent *);
+    bool hoverEvent(QHoverEvent *);
+    void hoverEnter(QHoverEvent *);
 };
 
 #endif // LABELS_H

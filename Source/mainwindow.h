@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include "labels.h"
 
 class MainWindow : public QMainWindow
@@ -16,8 +17,10 @@ public:
 private:
     QWidget *mainWidget;
     QVBoxLayout *mainVLayout;
+    QHBoxLayout *labelsHLayout;
     QString dataPath;
     Labels *noDateLabel;
+    Labels *addButtonLabel;
     void setLayout();
     void makeDataFolder();
     bool checkFileExistence();

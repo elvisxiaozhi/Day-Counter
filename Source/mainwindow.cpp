@@ -9,9 +9,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setLayout();
     makeDataFolder();
-    if(checkFileExistence() == false) {
-        noDateLabel->setText("No Date Added");
-    }
+//    if(checkFileExistence() == false) {
+//        noDateLabel->setTextFormat(Qt::RichText);
+//        noDateLabel->setText("<img src = :/add_button.png align = right width = '40' height = '40'> No Data added");
+//    }
 }
 
 MainWindow::~MainWindow()
@@ -28,8 +29,19 @@ void MainWindow::setLayout()
     mainVLayout = new QVBoxLayout;
     mainWidget->setLayout(mainVLayout);
 
+    labelsHLayout = new QHBoxLayout;
+    mainVLayout->addLayout(labelsHLayout);
+    labelsHLayout->setSpacing(0);
+
     noDateLabel = new Labels();
-    mainVLayout->addWidget(noDateLabel);
+    noDateLabel->setText("No Date Added");
+    noDateLabel->setMinimumSize(250, 100);
+    labelsHLayout->addWidget(noDateLabel);
+
+    addButtonLabel = new Labels();
+    labelsHLayout->addWidget(addButtonLabel);
+    addButtonLabel->setPixmap(QPixmap(":/add_button.png"));
+    addButtonLabel->setAttribute(Qt::WA_Hover);
 }
 
 void MainWindow::makeDataFolder()
