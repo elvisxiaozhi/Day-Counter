@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include "labels.h"
+#include "adddatewindow.h"
 
 class MainWindow : public QMainWindow
 {
@@ -21,6 +22,7 @@ private:
     QString dataPath;
     Labels *noDateLabel;
     Labels *addButtonLabel;
+    AddDateWindow setDate;
     void setLayout();
     void makeDataFolder();
     bool checkFileExistence();
@@ -28,6 +30,7 @@ private:
 private slots:
     void hoverEntered();
     void hoverLeft();
+    void leftClicked();
 };
 
 #endif // MAINWINDOW_H

@@ -18,6 +18,7 @@ private:
 signals:
     void hoverEntered();
     void hoverLeft();
+    void leftClicked();
 };
 
 #endif // LABELS_H

@@ -9,10 +9,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setLayout();
     makeDataFolder();
-//    if(checkFileExistence() == false) {
-//        noDateLabel->setTextFormat(Qt::RichText);
-//        noDateLabel->setText("<img src = :/add_button.png align = right width = '40' height = '40'> No Data added");
-//    }
 }
 
 MainWindow::~MainWindow()
@@ -43,6 +39,7 @@ void MainWindow::setLayout()
     addButtonLabel->setPixmap(QPixmap(":/add_button.png"));
     connect(addButtonLabel, &Labels::hoverEntered, this, &MainWindow::hoverEntered);
     connect(addButtonLabel, &Labels::hoverLeft, this, &MainWindow::hoverLeft);
+    connect(addButtonLabel, &Labels::leftClicked, this, &MainWindow::leftClicked);
 }
 
 void MainWindow::makeDataFolder()
@@ -72,4 +69,9 @@ void MainWindow::hoverEntered()
 void MainWindow::hoverLeft()
 {
     addButtonLabel->setStyleSheet("QLabel { background-color: #FAD7A0; color: #8E44AD; font-size: 30px; }");
+}
+
+void MainWindow::leftClicked()
+{
+    setDate.show();
 }

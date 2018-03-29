@@ -26,11 +26,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    labels.cpp
+    labels.cpp \
+    adddatewindow.cpp
 
 HEADERS += \
         mainwindow.h \
-    labels.h
+    labels.h \
+    adddatewindow.h
 
 RESOURCES += \
     ../Icons/icons.qrc

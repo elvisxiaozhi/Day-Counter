@@ -15,6 +15,10 @@ Labels::Labels()
 
 void Labels::mousePressEvent(QMouseEvent *event)
 {
+    if(event->button() == Qt::LeftButton) {
+        qDebug() << "Left Clicked";
+        emit leftClicked();
+    }
     if(event->button() == Qt::RightButton) {
         qDebug() << "Right Clicked";
     }
