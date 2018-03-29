@@ -1,12 +1,13 @@
 #include "labels.h"
 #include <QDebug>
 #include <QMouseEvent>
+#include <QHoverEvent>
 
 Labels::Labels()
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setAlignment(Qt::AlignCenter);
-    setStyleSheet("QLabel { background-color: #FAD7A0; color: #8E44AD; font-size: 30px;}");
+    setStyleSheet("QLabel { background-color: #FAD7A0; color: #8E44AD; font-size: 30px; }");
 
     setMouseTracking(true);
     setAttribute(Qt::WA_Hover);
@@ -19,11 +20,16 @@ void Labels::mousePressEvent(QMouseEvent *event)
     }
 }
 
-bool Labels::hoverEvent(QHoverEvent *event)
+bool Labels::event(QEvent *event)
 {
-    switch (event->type()) {
+    switch(event->type())
+    {
     case QEvent::HoverEnter:
         hoverEnter(static_cast<QHoverEvent*>(event));
+        return true;
+        break;
+    case QEvent::HoverLeave:
+        hoverLeave(static_cast<QHoverEvent*>(event));
         return true;
         break;
     default:
@@ -32,7 +38,14 @@ bool Labels::hoverEvent(QHoverEvent *event)
     return QWidget::event(event);
 }
 
-void Labels::hoverEnter(QHoverEvent *)
+void Labels::hoverEnter(QHoverEvent *event)
 {
-    qDebug() << "H";
+    qDebug() << event->type();
+    emit hoverEntered();
+}
+
+void Labels::hoverLeave(QHoverEvent *event)
+{
+    qDebug() << event->type();
+    emit hoverLeft();
 }

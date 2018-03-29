@@ -41,7 +41,8 @@ void MainWindow::setLayout()
     addButtonLabel = new Labels();
     labelsHLayout->addWidget(addButtonLabel);
     addButtonLabel->setPixmap(QPixmap(":/add_button.png"));
-    addButtonLabel->setAttribute(Qt::WA_Hover);
+    connect(addButtonLabel, &Labels::hoverEntered, this, &MainWindow::hoverEntered);
+    connect(addButtonLabel, &Labels::hoverLeft, this, &MainWindow::hoverLeft);
 }
 
 void MainWindow::makeDataFolder()
@@ -61,4 +62,14 @@ bool MainWindow::checkFileExistence()
         return false;
     }
     return true;
+}
+
+void MainWindow::hoverEntered()
+{
+    addButtonLabel->setStyleSheet("QLabel { background-color: #3498DB; color: #8E44AD; font-size: 30px; }");
+}
+
+void MainWindow::hoverLeft()
+{
+    addButtonLabel->setStyleSheet("QLabel { background-color: #FAD7A0; color: #8E44AD; font-size: 30px; }");
 }

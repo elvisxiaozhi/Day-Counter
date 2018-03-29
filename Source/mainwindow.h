@@ -24,6 +24,10 @@ private:
     void setLayout();
     void makeDataFolder();
     bool checkFileExistence();
+
+private slots:
+    void hoverEntered();
+    void hoverLeft();
 };
 
 #endif // MAINWINDOW_H

@@ -5,13 +5,19 @@
 
 class Labels : public QLabel
 {
+    Q_OBJECT
 public:
     Labels();
 
 private:
     void mousePressEvent(QMouseEvent *);
-    bool hoverEvent(QHoverEvent *);
-    void hoverEnter(QHoverEvent *);
+    bool event(QEvent *event);
+    void hoverEnter(QHoverEvent *event);
+    void hoverLeave(QHoverEvent *event);
+
+signals:
+    void hoverEntered();
+    void hoverLeft();
 };
 
 #endif // LABELS_H
