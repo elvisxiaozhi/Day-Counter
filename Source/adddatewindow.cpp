@@ -1,4 +1,5 @@
 #include "adddatewindow.h"
+#include "mainwindow.h"
 #include <QDebug>
 
 AddDateWindow::AddDateWindow(QDialog *parent) : QDialog(parent)
@@ -75,4 +76,6 @@ void AddDateWindow::threeDotsBtnClicked()
 void AddDateWindow::writeXmlFile()
 {
     qDebug() << "Xml";
+    qDebug() << dataPath;
+    MainWindow::checkFileExistence();
 }

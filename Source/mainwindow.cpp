@@ -4,6 +4,9 @@
 #include <QDir>
 #include <QFileInfo>
 
+QString dataPath = "";
+QString userDataPath = "";
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -48,12 +51,12 @@ void MainWindow::makeDataFolder()
     dataPath = homePath.first() + "/AppData/Local/Day-Counter";
     if(!QDir().exists(dataPath)) {
         QDir().mkdir(dataPath);
+        userDataPath = dataPath + "/userData.xml";
     }
 }
 
 bool MainWindow::checkFileExistence()
 {
-    QString userDataPath = dataPath + "/userData.xml";
     QFileInfo filePath(userDataPath);
     if(!filePath.exists()) {
         return false;
