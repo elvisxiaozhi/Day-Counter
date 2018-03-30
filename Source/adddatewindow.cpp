@@ -75,7 +75,5 @@ void AddDateWindow::threeDotsBtnClicked()
 
 void AddDateWindow::writeXmlFile()
 {
-    qDebug() << "Xml";
-    qDebug() << dataPath;
-    MainWindow::checkFileExistence();
+    MainWindow::isDataFileEmpty();
 }

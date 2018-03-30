@@ -51,17 +51,33 @@ void MainWindow::makeDataFolder()
     dataPath = homePath.first() + "/AppData/Local/Day-Counter";
     if(!QDir().exists(dataPath)) {
         QDir().mkdir(dataPath);
-        userDataPath = dataPath + "/userData.xml";
     }
+    userDataPath = dataPath + "/userData.xml";
+    QFile file(userDataPath);
+    if(file.open(QIODevice::ReadWrite)) {
+        qDebug() << "Data file created";
+    }
+    file.close();
 }
 
-bool MainWindow::checkFileExistence()
+bool MainWindow::isDataFileEmpty()
 {
-    QFileInfo filePath(userDataPath);
-    if(!filePath.exists()) {
-        return false;
+    int lines = 0;
+    QFile file(userDataPath);
+    if(file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream read(&file);
+        while(!read.atEnd()) {
+            read.readLine();
+            lines++;
+        }
     }
-    return true;
+    file.close();
+    if(lines == 0 || lines == 1) {
+        qDebug() << "File is empty";
+        return true;
+    }
+    qDebug() << "File lines: " << lines;
+    return false;
 }
 
 void MainWindow::hoverEntered()

@@ -18,7 +18,7 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    static bool checkFileExistence();
+    static bool isDataFileEmpty();
 
 private:
     QWidget *mainWidget;
