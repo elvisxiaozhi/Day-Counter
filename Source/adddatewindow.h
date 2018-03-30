@@ -8,6 +8,7 @@
 #include <QLineEdit>
 #include <QDateEdit>
 #include <QPushButton>
+#include <QCalendarWidget>
 
 class AddDateWindow : public QDialog
 {
@@ -21,12 +22,15 @@ private:
     QLabel *dateNameLabel, *dateLabel;
     QLineEdit *dateNameEdit;
     QDateEdit *dateEdit;
-    QPushButton *doneButton;
+    QPushButton *threeDotsBtn, *doneButton;
+    QCalendarWidget *calendarWidget;
+    bool calendarShowed;
     void setLayout();
 
 signals:
 
 private slots:
+    void threeDotsBtnClicked();
     void writeXmlFile();
 };
 

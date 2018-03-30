@@ -17,7 +17,7 @@ void AddDateWindow::setLayout()
 
     dateNameLabel = new QLabel;
     dateNameHLayout->addWidget(dateNameLabel);
-    dateNameLabel->setText("Name of the Date:");
+    dateNameLabel->setText("Name:");
     dateNameLabel->setStyleSheet("QLabel { background-color: #909497; color: #145A32; font-size: 20px; }");
 
     dateNameEdit = new QLineEdit;
@@ -28,12 +28,25 @@ void AddDateWindow::setLayout()
 
     dateLabel = new QLabel;
     dateHLayout->addWidget(dateLabel);
-    dateLabel->setText("Date:");
+    dateLabel->setText("Start Date:");
     dateLabel->setStyleSheet("QLabel { background-color: #909497; color: #145A32; font-size: 20px; }");
 
     dateEdit = new QDateEdit;
     dateHLayout->addWidget(dateEdit);
     dateEdit->setDate(QDate::currentDate());
+
+    threeDotsBtn = new QPushButton;
+    dateHLayout->addWidget(threeDotsBtn);
+    threeDotsBtn->setText("…");
+    threeDotsBtn->setMaximumWidth(30);
+    connect(threeDotsBtn, &QPushButton::clicked, this, &AddDateWindow::threeDotsBtnClicked);
+
+    calendarWidget = new QCalendarWidget;
+    mainVLayout->addWidget(calendarWidget);
+    calendarWidget->hide();
+    calendarShowed = false;
+    calendarWidget->setGridVisible(true);
+    connect(calendarWidget, &QCalendarWidget::selectionChanged, [this](){ dateEdit->setDate(calendarWidget->selectedDate()); });
 
     buttonHLayout = new QHBoxLayout;
     mainVLayout->addLayout(buttonHLayout);
@@ -45,6 +58,18 @@ void AddDateWindow::setLayout()
     buttonHLayout->addWidget(doneButton);
     doneButton->setText("Done");
     connect(doneButton, &QPushButton::clicked, this, &AddDateWindow::writeXmlFile);
+}
+
+void AddDateWindow::threeDotsBtnClicked()
+{
+    if(calendarShowed == true) {
+        calendarWidget->hide();
+        calendarShowed = false;
+    }
+    else {
+        calendarWidget->show();
+        calendarShowed = true;
+    }
 }
 
 void AddDateWindow::writeXmlFile()
