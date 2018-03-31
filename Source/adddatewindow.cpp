@@ -1,5 +1,7 @@
 #include "adddatewindow.h"
 #include "mainwindow.h"
+#include <QFile>
+#include <QXmlStreamWriter>
 #include <QDebug>
 
 AddDateWindow::AddDateWindow(QDialog *parent) : QDialog(parent)
@@ -23,6 +25,7 @@ void AddDateWindow::setLayout()
 
     dateNameEdit = new QLineEdit;
     dateNameHLayout->addWidget(dateNameEdit);
+    dateNameEdit->setPlaceholderText("Null");
 
     dateHLayout = new QHBoxLayout;
     mainVLayout->addLayout(dateHLayout);
@@ -59,6 +62,7 @@ void AddDateWindow::setLayout()
     buttonHLayout->addWidget(doneButton);
     doneButton->setText("Done");
     connect(doneButton, &QPushButton::clicked, this, &AddDateWindow::writeXmlFile);
+    connect(doneButton, &QPushButton::clicked, [this](){ this->close(); });
 }
 
 void AddDateWindow::threeDotsBtnClicked()
@@ -75,5 +79,35 @@ void AddDateWindow::threeDotsBtnClicked()
 
 void AddDateWindow::writeXmlFile()
 {
-    MainWindow::isDataFileEmpty();
+    QFile file(userDataPath);
+    QXmlStreamWriter xmlWriter(&file);
+    xmlWriter.setAutoFormatting(true);
+    if(MainWindow::isDataFileEmpty() == true) {
+        if(file.open(QIODevice::WriteOnly)) {
+            xmlWriter.writeStartDocument();
+            xmlWriter.writeStartElement("Date");
+            if(dateNameEdit->text() == "") {
+                xmlWriter.writeTextElement("Name", dateNameEdit->placeholderText());
+            }
+            else {
+                xmlWriter.writeTextElement("Name", dateNameEdit->text());
+            }
+            xmlWriter.writeTextElement("Start Date", dateEdit->date().toString());
+            xmlWriter.writeEndDocument();
+        }
+    }
+    else {
+        if(file.open(QIODevice::WriteOnly | QIODevice::Append)) {
+            xmlWriter.writeStartElement("Date");
+            if(dateNameEdit->text() == "") {
+                xmlWriter.writeTextElement("Name", "Null");
+            }
+            else {
+                xmlWriter.writeTextElement("Name", dateNameEdit->text());
+            }
+            xmlWriter.writeTextElement("Start Date", dateEdit->date().toString());
+            xmlWriter.writeEndDocument();
+        }
+    }
+    file.close();
 }
