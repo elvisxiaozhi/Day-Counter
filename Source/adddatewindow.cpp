@@ -2,13 +2,18 @@
 #include "mainwindow.h"
 #include <QFile>
 #include <QXmlStreamWriter>
+#include <QXmlStreamReader>
 #include <QDebug>
+
+QVector<QString> dateNamesVec;
+QVector<QString> datesVec;
 
 AddDateWindow::AddDateWindow(QDialog *parent) : QDialog(parent)
 {
     setWindowTitle("Set A Date");
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
     setLayout();
+    connect(this, &AddDateWindow::newDateCreated, this, &AddDateWindow::readXmlFile);
 }
 
 void AddDateWindow::setLayout()
@@ -62,7 +67,7 @@ void AddDateWindow::setLayout()
     buttonHLayout->addWidget(doneButton);
     doneButton->setText("Done");
     connect(doneButton, &QPushButton::clicked, this, &AddDateWindow::writeXmlFile);
-    connect(doneButton, &QPushButton::clicked, [this](){ this->close(); });
+    connect(doneButton, &QPushButton::clicked, [this](){ this->close(); emit newDateCreated(); });
 }
 
 void AddDateWindow::threeDotsBtnClicked()
@@ -79,35 +84,45 @@ void AddDateWindow::threeDotsBtnClicked()
 
 void AddDateWindow::writeXmlFile()
 {
+    dateNamesVec.push_back(dateNameEdit->text());
+    datesVec.push_back(dateEdit->date().toString("yyyy.MM.dd"));
+
     QFile file(userDataPath);
     QXmlStreamWriter xmlWriter(&file);
     xmlWriter.setAutoFormatting(true);
-    if(MainWindow::isDataFileEmpty() == true) {
-        if(file.open(QIODevice::WriteOnly)) {
-            xmlWriter.writeStartDocument();
-            xmlWriter.writeStartElement("Date");
-            if(dateNameEdit->text() == "") {
-                xmlWriter.writeTextElement("Name", dateNameEdit->placeholderText());
-            }
-            else {
-                xmlWriter.writeTextElement("Name", dateNameEdit->text());
-            }
-            xmlWriter.writeTextElement("Start Date", dateEdit->date().toString());
-            xmlWriter.writeEndDocument();
-        }
-    }
-    else {
-        if(file.open(QIODevice::WriteOnly | QIODevice::Append)) {
-            xmlWriter.writeStartElement("Date");
-            if(dateNameEdit->text() == "") {
+    if(file.open(QIODevice::WriteOnly)) {
+        xmlWriter.writeStartDocument();
+        xmlWriter.writeStartElement("dates");
+        for(int i = 0; i < dateNamesVec.size(); i++) {
+            xmlWriter.writeStartElement("date");
+            xmlWriter.writeTextElement("Name", dateNamesVec[i]);
+            xmlWriter.writeTextElement("start-date", datesVec[i]);
+            if(dateNamesVec[i] == "") {
                 xmlWriter.writeTextElement("Name", "Null");
             }
-            else {
-                xmlWriter.writeTextElement("Name", dateNameEdit->text());
-            }
-            xmlWriter.writeTextElement("Start Date", dateEdit->date().toString());
-            xmlWriter.writeEndDocument();
+            xmlWriter.writeEndElement();
         }
+        xmlWriter.writeEndDocument();
+        file.close();
     }
+}
+
+void AddDateWindow::readXmlFile()
+{
+    QXmlStreamReader xmlReader;
+    QFile file(userDataPath);
+    file.open(QIODevice::ReadOnly);
+    xmlReader.setDevice(&file);
+    int dateNumber = 0;
+//    while(!xmlReader.atEnd()) {
+////        if(xmlReader.readNext() == QXmlStreamReader::StartElement && xmlReader.name() == "name") {
+////            qDebug() << xmlReader.readElementText();
+////        }
+//        qDebug() << xmlReader.readNextStartElement();
+////        if(xmlReader.name() == "start-date") {
+////            qDebug() << xmlReader.readElementText();
+////        }
+//    }
     file.close();
+    qDebug() << "Date number: " << dateNumber;
 }

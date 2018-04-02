@@ -10,6 +10,9 @@
 #include <QPushButton>
 #include <QCalendarWidget>
 
+extern QVector<QString> dateNamesVec;
+extern QVector<QString> datesVec;
+
 class AddDateWindow : public QDialog
 {
     Q_OBJECT
@@ -28,10 +31,12 @@ private:
     void setLayout();
 
 signals:
+    void newDateCreated();
 
 private slots:
     void threeDotsBtnClicked();
     void writeXmlFile();
+    void readXmlFile();
 };
 
 #endif // ADDDATEWINDOW_H

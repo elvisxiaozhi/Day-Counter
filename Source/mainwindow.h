@@ -34,6 +34,7 @@ private slots:
     void hoverEntered();
     void hoverLeft();
     void leftClicked();
+    void showNewDate();
 };
 
 #endif // MAINWINDOW_H

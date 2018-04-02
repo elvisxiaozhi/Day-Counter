@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setLayout();
     makeDataFolder();
+//    connect(&setDate, &AddDateWindow::newDateCreated, this, &MainWindow::showNewDate);
 }
 
 MainWindow::~MainWindow()
@@ -93,4 +94,9 @@ void MainWindow::hoverLeft()
 void MainWindow::leftClicked()
 {
     setDate.show();
+}
+
+void MainWindow::showNewDate()
+{
+    noDateLabel->hide();
 }
