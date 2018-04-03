@@ -13,7 +13,6 @@ AddDateWindow::AddDateWindow(QDialog *parent) : QDialog(parent)
     setWindowTitle("Set A Date");
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
     setLayout();
-    connect(this, &AddDateWindow::newDateCreated, this, &AddDateWindow::readXmlFile);
 }
 
 void AddDateWindow::setLayout()
@@ -95,11 +94,13 @@ void AddDateWindow::writeXmlFile()
         xmlWriter.writeStartElement("dates");
         for(int i = 0; i < dateNamesVec.size(); i++) {
             xmlWriter.writeStartElement("date");
-            xmlWriter.writeTextElement("Name", dateNamesVec[i]);
-            xmlWriter.writeTextElement("start-date", datesVec[i]);
             if(dateNamesVec[i] == "") {
-                xmlWriter.writeTextElement("Name", "Null");
+                xmlWriter.writeTextElement("name", "Null");
             }
+            else {
+                xmlWriter.writeTextElement("name", dateNamesVec[i]);
+            }
+            xmlWriter.writeTextElement("start-date", datesVec[i]);
             xmlWriter.writeEndElement();
         }
         xmlWriter.writeEndDocument();
@@ -113,16 +114,19 @@ void AddDateWindow::readXmlFile()
     QFile file(userDataPath);
     file.open(QIODevice::ReadOnly);
     xmlReader.setDevice(&file);
-    int dateNumber = 0;
-//    while(!xmlReader.atEnd()) {
-////        if(xmlReader.readNext() == QXmlStreamReader::StartElement && xmlReader.name() == "name") {
-////            qDebug() << xmlReader.readElementText();
-////        }
-//        qDebug() << xmlReader.readNextStartElement();
-////        if(xmlReader.name() == "start-date") {
-////            qDebug() << xmlReader.readElementText();
-////        }
-//    }
+    while(!xmlReader.atEnd()) {
+        QXmlStreamReader::TokenType token = xmlReader.readNext();
+        if(token == QXmlStreamReader::StartElement) {
+            if(xmlReader.name() == "date") {
+                continue;
+            }
+            if(xmlReader.name() == "name") {
+                dateNamesVec.push_back(xmlReader.readElementText());
+            }
+            if(xmlReader.name() == "start-date") {
+                datesVec.push_back(xmlReader.readElementText());
+            }
+        }
+    }
     file.close();
-    qDebug() << "Date number: " << dateNumber;
 }

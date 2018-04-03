@@ -12,7 +12,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setLayout();
     makeDataFolder();
-//    connect(&setDate, &AddDateWindow::newDateCreated, this, &MainWindow::showNewDate);
+    setDate.readXmlFile();
+    connect(&setDate, &AddDateWindow::newDateCreated, this, &MainWindow::showNewDate);
 }
 
 MainWindow::~MainWindow()
