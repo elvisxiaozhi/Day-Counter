@@ -22,13 +22,14 @@ public:
 
 private:
     QWidget *mainWidget;
-    QVBoxLayout *mainVLayout;
+    QVBoxLayout *mainVLayout, *lblVLayout;
     QHBoxLayout *labelsHLayout;
     Labels *noDateLabel;
     Labels *addButtonLabel;
     AddDateWindow setDate;
+    QVector<Labels *> dateLabels;
     void setLayout();
-    void makeDataFolder();
+    void makeDataFile();
 
 private slots:
     void hoverEntered();

@@ -11,8 +11,11 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setLayout();
-    makeDataFolder();
+    makeDataFile();
     setDate.readXmlFile();
+    if(isDataFileEmpty() == false) {
+        showNewDate();
+    }
     connect(&setDate, &AddDateWindow::newDateCreated, this, &MainWindow::showNewDate);
 }
 
@@ -47,7 +50,7 @@ void MainWindow::setLayout()
     connect(addButtonLabel, &Labels::leftClicked, this, &MainWindow::leftClicked);
 }
 
-void MainWindow::makeDataFolder()
+void MainWindow::makeDataFile()
 {
     QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
     dataPath = homePath.first() + "/AppData/Local/Day-Counter";
@@ -100,4 +103,18 @@ void MainWindow::leftClicked()
 void MainWindow::showNewDate()
 {
     noDateLabel->hide();
+    delete lblVLayout;
+
+    lblVLayout = new QVBoxLayout;
+    mainVLayout->addLayout(lblVLayout);
+
+    dateLabels.clear();
+    dateLabels.resize(dateNamesVec.size());
+    for(int i = 0; i < dateNamesVec.size(); i++) {
+        dateLabels[i] = new Labels();
+        dateLabels[i]->setText(dateNamesVec[i]);
+        lblVLayout->addWidget(dateLabels[i]);
+    }
+
+    mainVLayout->addWidget(addButtonLabel);
 }
