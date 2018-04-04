@@ -65,6 +65,14 @@ void MainWindow::makeDataFile()
     file.close();
 }
 
+int MainWindow::countDays(QString dateString)
+{
+    QDate currentDate(QDate::currentDate());
+    dateString.replace(".", "/");
+    QDate endDate = QDate::fromString(dateString, "yyyy/MM/dd");
+    return currentDate.daysTo(endDate);
+}
+
 bool MainWindow::isDataFileEmpty()
 {
     int lines = 0;
@@ -112,7 +120,8 @@ void MainWindow::showNewDate()
     dateLabels.resize(dateNamesVec.size());
     for(int i = 0; i < dateNamesVec.size(); i++) {
         dateLabels[i] = new Labels();
-        dateLabels[i]->setText(dateNamesVec[i]);
+        dateLabels[i]->setWordWrap(true);
+        dateLabels[i]->setText(QString::number(countDays(datesVec[i])) + " days\nsince \n" + dateNamesVec[i]);
         lblVLayout->addWidget(dateLabels[i]);
     }
 

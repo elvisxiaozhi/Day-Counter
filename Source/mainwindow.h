@@ -30,6 +30,7 @@ private:
     QVector<Labels *> dateLabels;
     void setLayout();
     void makeDataFile();
+    int countDays(QString);
 
 private slots:
     void hoverEntered();
