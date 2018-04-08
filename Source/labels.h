@@ -19,6 +19,9 @@ signals:
     void hoverEntered();
     void hoverLeft();
     void leftClicked();
+
+private slots:
+    void showMenu(const QPoint &);
 };
 
 #endif // LABELS_H

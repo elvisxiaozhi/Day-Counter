@@ -7,7 +7,7 @@
 QString dataPath = "";
 QString userDataPath = "";
 const QString MainWindow::colorBase[MAX_NUMS] = {
-    "#E6B0AA", "#C0392B", "#7B241C", "#C39BD3", "#884EA0", "#512E5F", "#A9CCE3", "#2471A3", "#1B4F72", "#A3E4D7", "#17A589",
+    "#FADBD8", "#EBDEF0", "#D4E6F1", "#FDEBD0", "#AEB6BF"
 };
 
 MainWindow::MainWindow(QWidget *parent)
@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     if(isDataFileEmpty() == false) {
         showNewDate();
     }
+
     connect(&setDate, &AddDateWindow::newDateCreated, [this](){ delete lblVLayout; });
     connect(&setDate, &AddDateWindow::newDateCreated, this, &MainWindow::showNewDate);
 }

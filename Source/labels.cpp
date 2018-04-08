@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QMouseEvent>
 #include <QHoverEvent>
+#include <QMenu>
 
 Labels::Labels()
 {
@@ -11,6 +12,10 @@ Labels::Labels()
 
     setMouseTracking(true);
     setAttribute(Qt::WA_Hover);
+
+    setContextMenuPolicy(Qt::CustomContextMenu);
+
+    connect(this, &Labels::customContextMenuRequested, this, &Labels::showMenu);
 }
 
 void Labels::mousePressEvent(QMouseEvent *event)
@@ -18,9 +23,6 @@ void Labels::mousePressEvent(QMouseEvent *event)
     if(event->button() == Qt::LeftButton) {
         qDebug() << "Left Clicked";
         emit leftClicked();
-    }
-    if(event->button() == Qt::RightButton) {
-        qDebug() << "Right Clicked";
     }
 }
 
@@ -52,4 +54,20 @@ void Labels::hoverLeave(QHoverEvent *event)
 {
     qDebug() << event->type();
     emit hoverLeft();
+}
+
+void Labels::showMenu(const QPoint &pos)
+{
+    QMenu contextMenu(tr("Context menu"), this);
+    QAction upAction("Up", this);
+    QAction downAction("Down", this);
+    QAction detailAction("Detail", this);
+    QAction deleteAction("Delete", this);
+//        connect(&action1, SIGNAL(triggered()), this, SLOT(removeDataPoint()));
+
+    contextMenu.addAction(&upAction);
+    contextMenu.addAction(&downAction);
+    contextMenu.addAction(&detailAction);
+    contextMenu.addAction(&deleteAction);
+    contextMenu.exec(mapToGlobal(pos));
 }
