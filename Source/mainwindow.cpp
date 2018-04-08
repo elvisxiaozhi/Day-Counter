@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     if(isDataFileEmpty() == false) {
         showNewDate();
     }
+    connect(&setDate, &AddDateWindow::newDateCreated, [this](){ delete lblVLayout; });
     connect(&setDate, &AddDateWindow::newDateCreated, this, &MainWindow::showNewDate);
 }
 
@@ -111,7 +112,6 @@ void MainWindow::leftClicked()
 void MainWindow::showNewDate()
 {
     noDateLabel->hide();
-    delete lblVLayout;
 
     lblVLayout = new QVBoxLayout;
     mainVLayout->addLayout(lblVLayout);
