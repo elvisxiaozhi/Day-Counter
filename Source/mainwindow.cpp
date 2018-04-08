@@ -6,6 +6,9 @@
 
 QString dataPath = "";
 QString userDataPath = "";
+const QString MainWindow::colorBase[MAX_NUMS] = {
+    "#E6B0AA", "#C0392B", "#7B241C", "#C39BD3", "#884EA0", "#512E5F", "#A9CCE3", "#2471A3", "#1B4F72", "#A3E4D7", "#17A589",
+};
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -121,7 +124,16 @@ void MainWindow::showNewDate()
     for(int i = 0; i < dateNamesVec.size(); i++) {
         dateLabels[i] = new Labels();
         dateLabels[i]->setWordWrap(true);
-        dateLabels[i]->setText(QString::number(countDays(datesVec[i])) + " days\nsince \n" + dateNamesVec[i]);
+
+        int colorChoice = rand() % MAX_NUMS;
+        dateLabels[i]->setStyleSheet(QString("QLabel { background-color: %1; color: #8E44AD; font-size: 30px; }").arg(colorBase[colorChoice]));
+
+        if(countDays(datesVec[i]) < 0) {
+            dateLabels[i]->setText(QString::number(abs(countDays(datesVec[i]))) + " days\nsince \n" + dateNamesVec[i]); //abs(...) is used for showing absolute value
+        }
+        else {
+           dateLabels[i]->setText(QString::number(countDays(datesVec[i])) + " days\nuntil \n" + dateNamesVec[i]);
+        }
         lblVLayout->addWidget(dateLabels[i]);
     }
 

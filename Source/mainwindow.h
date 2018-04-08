@@ -18,8 +18,6 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    static bool isDataFileEmpty();
-
 private:
     QWidget *mainWidget;
     QVBoxLayout *mainVLayout, *lblVLayout;
@@ -28,7 +26,10 @@ private:
     Labels *addButtonLabel;
     AddDateWindow setDate;
     QVector<Labels *> dateLabels;
+    static const int MAX_NUMS = 11;
+    static const QString colorBase[MAX_NUMS];
     void setLayout();
+    static bool isDataFileEmpty();
     void makeDataFile();
     int countDays(QString);
 
