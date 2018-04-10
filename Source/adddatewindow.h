@@ -19,6 +19,7 @@ class AddDateWindow : public QDialog
 public:
     explicit AddDateWindow(QDialog *parent = nullptr);
     void readXmlFile();
+    static void writeXmlFile();
 
 private:
     QVBoxLayout *mainVLayout;
@@ -36,7 +37,6 @@ signals:
 
 private slots:
     void threeDotsBtnClicked();
-    void writeXmlFile();
 };
 
 #endif // ADDDATEWINDOW_H

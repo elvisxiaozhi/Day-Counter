@@ -65,7 +65,11 @@ void AddDateWindow::setLayout()
     doneButton = new QPushButton;
     buttonHLayout->addWidget(doneButton);
     doneButton->setText("Done");
-    connect(doneButton, &QPushButton::clicked, this, &AddDateWindow::writeXmlFile);
+    connect(doneButton, &QPushButton::clicked, [this](){
+        dateNamesVec.push_back(dateNameEdit->text());
+        datesVec.push_back(dateEdit->date().toString("yyyy.MM.dd"));
+        writeXmlFile();
+    });
     connect(doneButton, &QPushButton::clicked, [this](){ this->close(); emit newDateCreated(); });
 }
 
@@ -83,9 +87,6 @@ void AddDateWindow::threeDotsBtnClicked()
 
 void AddDateWindow::writeXmlFile()
 {
-    dateNamesVec.push_back(dateNameEdit->text());
-    datesVec.push_back(dateEdit->date().toString("yyyy.MM.dd"));
-
     QFile file(userDataPath);
     QXmlStreamWriter xmlWriter(&file);
     xmlWriter.setAutoFormatting(true);

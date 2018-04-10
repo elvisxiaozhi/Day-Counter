@@ -18,9 +18,6 @@ MainWindow::MainWindow(QWidget *parent)
     setDate.readXmlFile();
     if(isDataFileEmpty() == false) {
         showNewDate();
-        for(int i = 0; i < dateNamesVec.size(); i++) {
-            connect(dateLabels[i], &Labels::deleteActionTriggered, this, &MainWindow::deleteDate);
-        }
     }
 
     connect(&setDate, &AddDateWindow::newDateCreated, [this](){ delete lblVLayout; });
@@ -146,6 +143,8 @@ void MainWindow::showNewDate()
            dateLabels[i]->setText(QString::number(countDays(datesVec[i])) + " days\nuntil \n" + dateNamesVec[i]);
         }
         lblVLayout->addWidget(dateLabels[i]);
+
+        connect(dateLabels[i], &Labels::deleteActionTriggered, this, &MainWindow::deleteDate);
     }
 
     mainVLayout->addWidget(addButtonLabel);
@@ -158,4 +157,6 @@ void MainWindow::deleteDate()
     for(int i = 0; i < dateLabels.size(); i++) { //note the dateLabel.size()
         dateLabels[i]->deleteLater();
     }
+    showNewDate();
+    AddDateWindow::writeXmlFile();
 }
