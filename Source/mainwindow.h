@@ -41,6 +41,8 @@ private slots:
     void hoverLeft();
     void leftClicked();
     void showNewDate();
+    void dateMoveUp();
+    void dateMoveDown();
     void deleteDate();
 };
 

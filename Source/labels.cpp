@@ -38,11 +38,15 @@ void Labels::setMenu()
     upAction = new QAction("Up", labelMenu);
     downAction = new QAction("Down", labelMenu);
     detailAction = new QAction("Detail", labelMenu);
+    editAction = new QAction("Edit", labelMenu);
     deleteAction = new QAction("Delete", labelMenu);
     labelMenu->addAction(upAction);
     labelMenu->addAction(downAction);
     labelMenu->addAction(detailAction);
+    labelMenu->addAction(editAction);
     labelMenu->addAction(deleteAction);
     connect(this, &Labels::customContextMenuRequested, [this](){ labelMenu->exec(QCursor::pos()); });
+    connect(upAction, &QAction::triggered, [this](){ emit upActionTriggered(); });
+    connect(downAction, &QAction::triggered, [this](){ emit downActionTriggered(); });
     connect(deleteAction, &QAction::triggered, [this](){ emit deleteActionTriggered(); });
 }

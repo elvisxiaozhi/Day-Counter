@@ -12,7 +12,7 @@ public:
 
 private:
     QMenu *labelMenu;
-    QAction *upAction, *downAction, *detailAction, *deleteAction;
+    QAction *upAction, *downAction, *detailAction, *editAction, *deleteAction;
     void mousePressEvent(QMouseEvent *);
     bool event(QEvent *event); //it has to be bool type
     void setMenu();
@@ -21,6 +21,8 @@ signals:
     void hoverEntered();
     void hoverLeft();
     void leftClicked();
+    void upActionTriggered();
+    void downActionTriggered();
     void deleteActionTriggered();
 
 private slots:

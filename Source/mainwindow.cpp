@@ -131,6 +131,7 @@ void MainWindow::showNewDate()
     for(int i = 0; i < dateNamesVec.size(); i++) {
         dateLabels[i] = new Labels();
         dateLabels[i]->setObjectName(QString::number(i));
+        dateLabels[i]->setMinimumWidth(280); //set minimum width to let the window title completely show up
         dateLabels[i]->setWordWrap(true);
 
         int colorChoice = rand() % MAX_NUMS;
@@ -144,10 +145,38 @@ void MainWindow::showNewDate()
         }
         lblVLayout->addWidget(dateLabels[i]);
 
+        connect(dateLabels[i], &Labels::upActionTriggered, this, &MainWindow::dateMoveUp);
+        connect(dateLabels[i], &Labels::downActionTriggered, this, &MainWindow::dateMoveDown);
         connect(dateLabels[i], &Labels::deleteActionTriggered, this, &MainWindow::deleteDate);
     }
 
     mainVLayout->addWidget(addButtonLabel);
+}
+
+void MainWindow::dateMoveUp()
+{
+    if(getLabelInfo() != 0) {
+        std::iter_swap(dateNamesVec.begin() + getLabelInfo(), dateNamesVec.begin() + getLabelInfo() - 1);
+        std::iter_swap(datesVec.begin() + getLabelInfo(), datesVec.begin() + getLabelInfo() - 1);
+        for(int i = 0; i < dateLabels.size(); i++) { //note the dateLabel.size()
+            dateLabels[i]->deleteLater();
+        }
+        AddDateWindow::writeXmlFile();
+        showNewDate();
+    }
+}
+
+void MainWindow::dateMoveDown()
+{
+    if(getLabelInfo() != dateLabels.size() - 1) {
+        std::iter_swap(dateNamesVec.begin() + getLabelInfo(), dateNamesVec.begin() + getLabelInfo() + 1);
+        std::iter_swap(datesVec.begin() + getLabelInfo(), datesVec.begin() + getLabelInfo() + 1);
+        for(int i = 0; i < dateLabels.size(); i++) { //note the dateLabel.size()
+            dateLabels[i]->deleteLater();
+        }
+        AddDateWindow::writeXmlFile();
+        showNewDate();
+    }
 }
 
 void MainWindow::deleteDate()
