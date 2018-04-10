@@ -3,6 +3,7 @@
 
 #include <QLabel>
 #include <QMenu>
+#include "messageboxes.h"
 
 class Labels : public QLabel
 {
@@ -13,6 +14,7 @@ public:
 private:
     QMenu *labelMenu;
     QAction *upAction, *downAction, *detailAction, *editAction, *deleteAction;
+    MessageBoxes setDeleteMsBox;
     void mousePressEvent(QMouseEvent *);
     bool event(QEvent *event); //it has to be bool type
     void setMenu();

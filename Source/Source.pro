@@ -27,12 +27,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     labels.cpp \
-    adddatewindow.cpp
+    adddatewindow.cpp \
+    messageboxes.cpp
 
 HEADERS += \
         mainwindow.h \
     labels.h \
-    adddatewindow.h
+    adddatewindow.h \
+    messageboxes.h
 
 RESOURCES += \
     ../Icons/icons.qrc

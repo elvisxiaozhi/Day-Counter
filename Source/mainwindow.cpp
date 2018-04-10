@@ -66,8 +66,8 @@ void MainWindow::makeDataFile()
     QFile file(userDataPath);
     if(file.open(QIODevice::ReadWrite)) {
         qDebug() << "Data file created";
+        file.close();
     }
-    file.close();
 }
 
 int MainWindow::countDays(QString dateString)

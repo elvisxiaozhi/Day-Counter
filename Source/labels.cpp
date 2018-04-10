@@ -48,5 +48,6 @@ void Labels::setMenu()
     connect(this, &Labels::customContextMenuRequested, [this](){ labelMenu->exec(QCursor::pos()); });
     connect(upAction, &QAction::triggered, [this](){ emit upActionTriggered(); });
     connect(downAction, &QAction::triggered, [this](){ emit downActionTriggered(); });
-    connect(deleteAction, &QAction::triggered, [this](){ emit deleteActionTriggered(); });
+    connect(deleteAction, &QAction::triggered, [this](){ setDeleteMsBox.showDeleteMsBox(); });
+    connect(&setDeleteMsBox, &MessageBoxes::deletionConfirmed, this, &Labels::deleteActionTriggered);
 }
