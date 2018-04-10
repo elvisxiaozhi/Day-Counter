@@ -14,9 +14,7 @@ private:
     QMenu *labelMenu;
     QAction *upAction, *downAction, *detailAction, *deleteAction;
     void mousePressEvent(QMouseEvent *);
-    bool event(QEvent *event);
-    void hoverEnter(QHoverEvent *event);
-    void hoverLeave(QHoverEvent *event);
+    bool event(QEvent *event); //it has to be bool type
     void setMenu();
 
 signals:
