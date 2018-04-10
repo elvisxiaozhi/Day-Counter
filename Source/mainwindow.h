@@ -32,12 +32,16 @@ private:
     static bool isDataFileEmpty();
     void makeDataFile();
     int countDays(QString);
+    int getLabelInfo();
+
+signals:
 
 private slots:
     void hoverEntered();
     void hoverLeft();
     void leftClicked();
     void showNewDate();
+    void deleteDate();
 };
 
 #endif // MAINWINDOW_H

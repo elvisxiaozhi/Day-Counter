@@ -2,7 +2,6 @@
 #include <QDebug>
 #include <QMouseEvent>
 #include <QHoverEvent>
-#include <QMenu>
 
 Labels::Labels()
 {
@@ -12,10 +11,10 @@ Labels::Labels()
 
     setMouseTracking(true);
     setAttribute(Qt::WA_Hover);
-
     setContextMenuPolicy(Qt::CustomContextMenu);
 
-    connect(this, &Labels::customContextMenuRequested, this, &Labels::showMenu);
+    connect(this, &Labels::customContextMenuRequested, [this](){ labelMenu->exec(QCursor::pos()); });
+    setMenu();
 }
 
 void Labels::mousePressEvent(QMouseEvent *event)
@@ -56,18 +55,16 @@ void Labels::hoverLeave(QHoverEvent *event)
     emit hoverLeft();
 }
 
-void Labels::showMenu(const QPoint &pos)
+void Labels::setMenu()
 {
-    QMenu contextMenu(tr("Context menu"), this);
-    QAction upAction("Up", this);
-    QAction downAction("Down", this);
-    QAction detailAction("Detail", this);
-    QAction deleteAction("Delete", this);
-//        connect(&action1, SIGNAL(triggered()), this, SLOT(removeDataPoint()));
-
-    contextMenu.addAction(&upAction);
-    contextMenu.addAction(&downAction);
-    contextMenu.addAction(&detailAction);
-    contextMenu.addAction(&deleteAction);
-    contextMenu.exec(mapToGlobal(pos));
+    labelMenu = new QMenu(this);
+    upAction = new QAction("Up", labelMenu);
+    downAction = new QAction("Down", labelMenu);
+    detailAction = new QAction("Detail", labelMenu);
+    deleteAction = new QAction("Delete", labelMenu);
+    labelMenu->addAction(upAction);
+    labelMenu->addAction(downAction);
+    labelMenu->addAction(detailAction);
+    labelMenu->addAction(deleteAction);
+    connect(deleteAction, &QAction::triggered, [this](){ emit deleteActionTriggered(); });
 }

@@ -18,6 +18,9 @@ MainWindow::MainWindow(QWidget *parent)
     setDate.readXmlFile();
     if(isDataFileEmpty() == false) {
         showNewDate();
+        for(int i = 0; i < dateNamesVec.size(); i++) {
+            connect(dateLabels[i], &Labels::deleteActionTriggered, this, &MainWindow::deleteDate);
+        }
     }
 
     connect(&setDate, &AddDateWindow::newDateCreated, [this](){ delete lblVLayout; });
@@ -78,6 +81,12 @@ int MainWindow::countDays(QString dateString)
     return currentDate.daysTo(endDate);
 }
 
+int MainWindow::getLabelInfo()
+{
+    QLabel *labelSender = qobject_cast<QLabel *>(sender());
+    return labelSender->objectName().toInt();
+}
+
 bool MainWindow::isDataFileEmpty()
 {
     int lines = 0;
@@ -124,6 +133,7 @@ void MainWindow::showNewDate()
     dateLabels.resize(dateNamesVec.size());
     for(int i = 0; i < dateNamesVec.size(); i++) {
         dateLabels[i] = new Labels();
+        dateLabels[i]->setObjectName(QString::number(i));
         dateLabels[i]->setWordWrap(true);
 
         int colorChoice = rand() % MAX_NUMS;
@@ -139,4 +149,13 @@ void MainWindow::showNewDate()
     }
 
     mainVLayout->addWidget(addButtonLabel);
+}
+
+void MainWindow::deleteDate()
+{
+    dateNamesVec.erase(dateNamesVec.begin() + getLabelInfo());
+    datesVec.erase(datesVec.begin() + getLabelInfo());
+    for(int i = 0; i < dateLabels.size(); i++) { //note the dateLabel.size()
+        dateLabels[i]->deleteLater();
+    }
 }
