@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&setDate, &AddDateWindow::newDateCreated, this, &MainWindow::showNewDate);
     connect(&setDate, &AddDateWindow::dateHasEdit, this, &MainWindow::removeOldDate);
 
-    statusBar()->showMessage(QString::number(datesVec.size()) + " items");
+    statusBar()->showMessage(QString::number(dateLabels.size()) + " items");
 }
 
 MainWindow::~MainWindow()
