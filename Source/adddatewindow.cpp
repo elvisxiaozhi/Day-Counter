@@ -134,6 +134,12 @@ void AddDateWindow::editDate(int pos)
     doneEditButton->show();
     connect(doneEditButton, &QPushButton::clicked, [this](){ doneButton->show(); doneEditButton->hide(); this->close(); });
     connect(doneEditButton, &QPushButton::clicked, [this, pos](){ emit dateHasEdit(pos); });
+    connect(doneEditButton, &QPushButton::clicked, [this](){
+        dateNamesVec.push_back(dateNameEdit->text());
+        datesVec.push_back(dateEdit->date().toString("yyyy.MM.dd"));
+        writeXmlFile();
+        emit newDateCreated();
+    });
 }
 
 void AddDateWindow::readXmlFile()

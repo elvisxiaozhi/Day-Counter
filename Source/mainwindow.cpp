@@ -190,11 +190,11 @@ void MainWindow::editDate()
 
 void MainWindow::removeOldDate(int pos)
 {
-//    delete dateLabels[pos];
+    for(int i = 0; i < dateLabels.size(); i++) { //note the dateLabel.size()
+        dateLabels[i]->deleteLater();
+    }
     dateNamesVec.erase(dateNamesVec.begin() + pos);
     datesVec.erase(datesVec.begin() + pos);
-//    AddDateWindow::writeXmlFile();
-    qDebug() << dateNamesVec << pos;
 }
 
 void MainWindow::deleteDate()
