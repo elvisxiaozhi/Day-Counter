@@ -3,6 +3,9 @@
 #include <QStandardPaths>
 #include <QDir>
 #include <QFileInfo>
+#include <QMenu>
+#include <QMenuBar>
+#include <QStatusBar>
 
 QString dataPath = "";
 QString userDataPath = "";
@@ -14,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setLayout();
+    setMenuBar(); //must be below setLayout();
     makeDataFile();
     setDate.readXmlFile();
     if(isDataFileEmpty() == false) {
@@ -23,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&setDate, &AddDateWindow::newDateCreated, [this](){ delete lblVLayout; });
     connect(&setDate, &AddDateWindow::newDateCreated, this, &MainWindow::showNewDate);
     connect(&setDate, &AddDateWindow::dateHasEdit, this, &MainWindow::removeOldDate);
+
+    statusBar()->showMessage(QString::number(datesVec.size()) + " items");
 }
 
 MainWindow::~MainWindow()
@@ -54,6 +60,16 @@ void MainWindow::setLayout()
     connect(addButtonLabel, &Labels::hoverEntered, this, &MainWindow::hoverEntered);
     connect(addButtonLabel, &Labels::hoverLeft, this, &MainWindow::hoverLeft);
     connect(addButtonLabel, &Labels::leftClicked, this, &MainWindow::leftClicked);
+}
+
+void MainWindow::setMenuBar()
+{
+    QMenu *settingsMenu = new QMenu(mainWidget);
+    settingsMenu = menuBar()->addMenu("Settings");
+    QMenu *aboutMenu = new QMenu(mainWidget);
+    aboutMenu = menuBar()->addMenu("About");
+    connect(settingsMenu, &QMenu::aboutToShow, this, &MainWindow::showSettings);
+    connect(aboutMenu, &QMenu::aboutToShow, this, &MainWindow::showAboutPage);
 }
 
 void MainWindow::makeDataFile()
@@ -154,6 +170,8 @@ void MainWindow::showNewDate()
     }
 
     mainVLayout->addWidget(addButtonLabel);
+
+    statusBar()->showMessage(QString::number(datesVec.size()) + " items");
 }
 
 void MainWindow::dateMoveUp()
@@ -206,4 +224,14 @@ void MainWindow::deleteDate()
     }
     showNewDate();
     AddDateWindow::writeXmlFile();
+}
+
+void MainWindow::showSettings()
+{
+    qDebug() << "Settings";
+}
+
+void MainWindow::showAboutPage()
+{
+
 }

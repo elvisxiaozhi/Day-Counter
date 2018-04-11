@@ -29,6 +29,7 @@ private:
     static const int MAX_NUMS = 5;
     static const QString colorBase[MAX_NUMS];
     void setLayout();
+    void setMenuBar();
     static bool isDataFileEmpty();
     void makeDataFile();
     int countDays(QString);
@@ -46,6 +47,8 @@ private slots:
     void editDate();
     void removeOldDate();
     void deleteDate();
+    void showSettings();
+    void showAboutPage();
 };
 
 #endif // MAINWINDOW_H
