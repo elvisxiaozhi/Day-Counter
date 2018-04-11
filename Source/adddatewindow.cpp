@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
+#include <QCloseEvent>
 #include <QDebug>
 
 QVector<QString> dateNamesVec;
@@ -13,6 +14,7 @@ AddDateWindow::AddDateWindow(QDialog *parent) : QDialog(parent)
     setWindowTitle("Set A Date");
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
     setLayout();
+
 }
 
 void AddDateWindow::setLayout()
@@ -64,13 +66,25 @@ void AddDateWindow::setLayout()
 
     doneButton = new QPushButton;
     buttonHLayout->addWidget(doneButton);
+    doneEditButton = new QPushButton;
+    buttonHLayout->addWidget(doneEditButton);
     doneButton->setText("Done");
+    doneEditButton->setText("Done_1");
+    doneEditButton->hide();
     connect(doneButton, &QPushButton::clicked, [this](){
         dateNamesVec.push_back(dateNameEdit->text());
         datesVec.push_back(dateEdit->date().toString("yyyy.MM.dd"));
         writeXmlFile();
     });
     connect(doneButton, &QPushButton::clicked, [this](){ this->close(); emit newDateCreated(); });
+}
+
+void AddDateWindow::closeEvent(QCloseEvent *event)
+{
+    connect(this, &AddDateWindow::editWindowClosed, [this](){ doneButton->show(); doneEditButton->hide(); });
+    if(event->type() == QCloseEvent::Close) {
+        emit editWindowClosed();
+    }
 }
 
 void AddDateWindow::threeDotsBtnClicked()
@@ -107,6 +121,19 @@ void AddDateWindow::writeXmlFile()
         xmlWriter.writeEndDocument();
         file.close();
     }
+}
+
+void AddDateWindow::editDate(int pos)
+{
+    dateNameEdit->setText(dateNamesVec[pos]);
+
+    QStringList dateStringList = datesVec[pos].split(".");
+    QString dateString = dateStringList[2] + "/" + dateStringList[1] + "/" + dateStringList[0];
+    dateEdit->setDate(QDate::fromString(dateString, "dd/MM/yyyy"));
+    doneButton->hide();
+    doneEditButton->show();
+    connect(doneEditButton, &QPushButton::clicked, [this](){ doneButton->show(); doneEditButton->hide(); this->close(); });
+    connect(doneEditButton, &QPushButton::clicked, [this, pos](){ emit dateHasEdit(pos); });
 }
 
 void AddDateWindow::readXmlFile()

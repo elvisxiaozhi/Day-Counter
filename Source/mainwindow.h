@@ -43,6 +43,8 @@ private slots:
     void showNewDate();
     void dateMoveUp();
     void dateMoveDown();
+    void editDate();
+    void removeOldDate(int);
     void deleteDate();
 };
 

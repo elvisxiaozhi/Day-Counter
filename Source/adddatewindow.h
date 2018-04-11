@@ -20,6 +20,7 @@ public:
     explicit AddDateWindow(QDialog *parent = nullptr);
     void readXmlFile();
     static void writeXmlFile();
+    void editDate(int);
 
 private:
     QVBoxLayout *mainVLayout;
@@ -27,13 +28,16 @@ private:
     QLabel *dateNameLabel, *dateLabel;
     QLineEdit *dateNameEdit;
     QDateEdit *dateEdit;
-    QPushButton *threeDotsBtn, *doneButton;
+    QPushButton *threeDotsBtn, *doneButton, *doneEditButton;
     QCalendarWidget *calendarWidget;
     bool calendarShowed;
     void setLayout();
+    void closeEvent(QCloseEvent *);
 
 signals:
     void newDateCreated();
+    void dateHasEdit(int);
+    void editWindowClosed();
 
 private slots:
     void threeDotsBtnClicked();

@@ -25,6 +25,7 @@ signals:
     void leftClicked();
     void upActionTriggered();
     void downActionTriggered();
+    void editActionTriggered();
     void deleteActionTriggered();
 
 private slots:

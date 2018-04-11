@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(&setDate, &AddDateWindow::newDateCreated, [this](){ delete lblVLayout; });
     connect(&setDate, &AddDateWindow::newDateCreated, this, &MainWindow::showNewDate);
+    connect(&setDate, &AddDateWindow::dateHasEdit, this, &MainWindow::removeOldDate);
 }
 
 MainWindow::~MainWindow()
@@ -128,6 +129,7 @@ void MainWindow::showNewDate()
 
     dateLabels.clear();
     dateLabels.resize(dateNamesVec.size());
+
     for(int i = 0; i < dateNamesVec.size(); i++) {
         dateLabels[i] = new Labels();
         dateLabels[i]->setObjectName(QString::number(i));
@@ -147,6 +149,7 @@ void MainWindow::showNewDate()
 
         connect(dateLabels[i], &Labels::upActionTriggered, this, &MainWindow::dateMoveUp);
         connect(dateLabels[i], &Labels::downActionTriggered, this, &MainWindow::dateMoveDown);
+        connect(dateLabels[i], &Labels::editActionTriggered, this, &MainWindow::editDate);
         connect(dateLabels[i], &Labels::deleteActionTriggered, this, &MainWindow::deleteDate);
     }
 
@@ -177,6 +180,21 @@ void MainWindow::dateMoveDown()
         AddDateWindow::writeXmlFile();
         showNewDate();
     }
+}
+
+void MainWindow::editDate()
+{
+    setDate.show();
+    setDate.editDate(getLabelInfo());
+}
+
+void MainWindow::removeOldDate(int pos)
+{
+//    delete dateLabels[pos];
+    dateNamesVec.erase(dateNamesVec.begin() + pos);
+    datesVec.erase(datesVec.begin() + pos);
+//    AddDateWindow::writeXmlFile();
+    qDebug() << dateNamesVec << pos;
 }
 
 void MainWindow::deleteDate()
