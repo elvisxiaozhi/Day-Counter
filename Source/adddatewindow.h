@@ -31,16 +31,18 @@ private:
     QPushButton *threeDotsBtn, *doneButton, *doneEditButton;
     QCalendarWidget *calendarWidget;
     bool calendarShowed;
+    int editLabelPos;
     void setLayout();
     void closeEvent(QCloseEvent *);
 
 signals:
     void newDateCreated();
-    void dateHasEdit(int);
+    void dateHasEdit();
     void editWindowClosed();
 
 private slots:
     void threeDotsBtnClicked();
+    void doneEditButtonClicked();
 };
 
 #endif // ADDDATEWINDOW_H

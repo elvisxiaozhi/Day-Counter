@@ -44,7 +44,7 @@ private slots:
     void dateMoveUp();
     void dateMoveDown();
     void editDate();
-    void removeOldDate(int);
+    void removeOldDate();
     void deleteDate();
 };
 

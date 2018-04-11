@@ -69,7 +69,7 @@ void AddDateWindow::setLayout()
     doneEditButton = new QPushButton;
     buttonHLayout->addWidget(doneEditButton);
     doneButton->setText("Done");
-    doneEditButton->setText("Done_1");
+    doneEditButton->setText("Done");
     doneEditButton->hide();
     connect(doneButton, &QPushButton::clicked, [this](){
         dateNamesVec.push_back(dateNameEdit->text());
@@ -97,6 +97,16 @@ void AddDateWindow::threeDotsBtnClicked()
         calendarWidget->show();
         calendarShowed = true;
     }
+}
+
+void AddDateWindow::doneEditButtonClicked()
+{
+    dateNamesVec[editLabelPos] = dateNameEdit->text();
+    datesVec[editLabelPos] = dateEdit->date().toString("yyyy.MM.dd");
+    this->close();
+    doneButton->show();
+    doneEditButton->hide();
+    emit dateHasEdit();
 }
 
 void AddDateWindow::writeXmlFile()
@@ -130,16 +140,12 @@ void AddDateWindow::editDate(int pos)
     QStringList dateStringList = datesVec[pos].split(".");
     QString dateString = dateStringList[2] + "/" + dateStringList[1] + "/" + dateStringList[0];
     dateEdit->setDate(QDate::fromString(dateString, "dd/MM/yyyy"));
+
+    editLabelPos = pos;
+
     doneButton->hide();
     doneEditButton->show();
-    connect(doneEditButton, &QPushButton::clicked, [this](){ doneButton->show(); doneEditButton->hide(); this->close(); });
-    connect(doneEditButton, &QPushButton::clicked, [this, pos](){ emit dateHasEdit(pos); });
-    connect(doneEditButton, &QPushButton::clicked, [this](){
-        dateNamesVec.push_back(dateNameEdit->text());
-        datesVec.push_back(dateEdit->date().toString("yyyy.MM.dd"));
-        writeXmlFile();
-        emit newDateCreated();
-    });
+    connect(doneEditButton, &QPushButton::clicked, this, &AddDateWindow::doneEditButtonClicked);
 }
 
 void AddDateWindow::readXmlFile()

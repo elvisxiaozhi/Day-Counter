@@ -188,13 +188,13 @@ void MainWindow::editDate()
     setDate.editDate(getLabelInfo());
 }
 
-void MainWindow::removeOldDate(int pos)
+void MainWindow::removeOldDate()
 {
     for(int i = 0; i < dateLabels.size(); i++) { //note the dateLabel.size()
         dateLabels[i]->deleteLater();
     }
-    dateNamesVec.erase(dateNamesVec.begin() + pos);
-    datesVec.erase(datesVec.begin() + pos);
+    AddDateWindow::writeXmlFile();
+    showNewDate();
 }
 
 void MainWindow::deleteDate()
