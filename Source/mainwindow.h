@@ -7,6 +7,7 @@
 #include <QSystemTrayIcon>
 #include "labels.h"
 #include "adddatewindow.h"
+#include "timer.h"
 
 extern QString dataPath;
 extern QString userDataPath;
@@ -29,6 +30,7 @@ private:
     QVector<Labels *> dateLabels;
     QSystemTrayIcon *trayIcon;
     QAction *startOnBootAction;
+    Timer setTimer;
     static const int MAX_NUMS = 5;
     static const QString colorBase[MAX_NUMS];
     void setLayout();
@@ -55,6 +57,7 @@ private slots:
     void startOnBootActionChanged();
     void showSettings();
     void showAboutPage();
+    void updateDays();
 };
 
 #endif // MAINWINDOW_H

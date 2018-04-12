@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&setDate, &AddDateWindow::newDateCreated, [this](){ delete lblVLayout; });
     connect(&setDate, &AddDateWindow::newDateCreated, this, &MainWindow::showNewDate);
     connect(&setDate, &AddDateWindow::dateHasEdit, this, &MainWindow::removeOldDate);
+    connect(&setTimer, &Timer::newDayHasCome, this, &MainWindow::updateDays);
 
     statusBar()->showMessage(QString::number(dateLabels.size()) + " items");
 }
@@ -285,4 +286,16 @@ void MainWindow::showSettings()
 void MainWindow::showAboutPage()
 {
 
+}
+
+void MainWindow::updateDays()
+{
+    for(int i = 0; i < dateNamesVec.size(); i++) {
+        if(countDays(datesVec[i]) < 0) {
+            dateLabels[i]->setText(QString::number(abs(countDays(datesVec[i]))) + " days\nsince \n" + dateNamesVec[i]); //abs(...) is used for showing absolute value
+        }
+        else {
+           dateLabels[i]->setText(QString::number(countDays(datesVec[i])) + " days\nuntil \n" + dateNamesVec[i]);
+        }
+    }
 }

@@ -28,13 +28,15 @@ SOURCES += \
         mainwindow.cpp \
     labels.cpp \
     adddatewindow.cpp \
-    messageboxes.cpp
+    messageboxes.cpp \
+    timer.cpp
 
 HEADERS += \
         mainwindow.h \
     labels.h \
     adddatewindow.h \
-    messageboxes.h
+    messageboxes.h \
+    timer.h
 
 RESOURCES += \
     ../Icons/icons.qrc
