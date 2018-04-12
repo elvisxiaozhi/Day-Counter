@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QSystemTrayIcon>
 #include "labels.h"
 #include "adddatewindow.h"
 
@@ -26,14 +27,17 @@ private:
     Labels *addButtonLabel;
     AddDateWindow setDate;
     QVector<Labels *> dateLabels;
+    QSystemTrayIcon *trayIcon;
     static const int MAX_NUMS = 5;
     static const QString colorBase[MAX_NUMS];
     void setLayout();
     void setMenuBar();
+    void setTrayIcon();
     static bool isDataFileEmpty();
     void makeDataFile();
     int countDays(QString);
     int getLabelInfo();
+    void closeEvent(QCloseEvent *); //avoid closing the program when the tray icon is visible
 
 signals:
 

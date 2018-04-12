@@ -6,6 +6,7 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QStatusBar>
+#include <QCloseEvent>
 
 QString dataPath = "";
 QString userDataPath = "";
@@ -18,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setLayout();
     setMenuBar(); //must be below setLayout();
+    setTrayIcon();
     makeDataFile();
     setDate.readXmlFile();
     if(isDataFileEmpty() == false) {
@@ -72,6 +74,18 @@ void MainWindow::setMenuBar()
     connect(aboutMenu, &QMenu::aboutToShow, this, &MainWindow::showAboutPage);
 }
 
+void MainWindow::setTrayIcon()
+{
+    trayIcon = new QSystemTrayIcon(QIcon(":/add_button.png"), this);
+    QAction *quitAction = new QAction("Quit", trayIcon);
+    QMenu *trayIconMenu = new QMenu;
+    trayIconMenu->addAction(quitAction);
+    trayIcon->setContextMenu(trayIconMenu);
+    trayIcon->show();
+    connect(quitAction, &QAction::triggered, [this](){ this->close(); });
+    connect(trayIcon, &QSystemTrayIcon::activated, [this](){ this->show(); }); //click or double click the tray icon to show the main window
+}
+
 void MainWindow::makeDataFile()
 {
     QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
@@ -99,6 +113,14 @@ int MainWindow::getLabelInfo()
 {
     QLabel *labelSender = qobject_cast<QLabel *>(sender());
     return labelSender->objectName().toInt();
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    if(trayIcon->isVisible()) {
+        event->ignore();
+        this->hide();
+    }
 }
 
 bool MainWindow::isDataFileEmpty()

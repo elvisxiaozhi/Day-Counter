@@ -10,8 +10,8 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 
-    QSettings settings("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
-    settings.setValue("Day-Counter", QCoreApplication::applicationFilePath().replace('/', '\\'));
+//    QSettings settings("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
+//    settings.setValue("Day-Counter", QCoreApplication::applicationFilePath().replace('/', '\\'));
 
     return a.exec();
 }
