@@ -91,7 +91,7 @@ void MainWindow::setTrayIcon()
     QAction *quitAction = new QAction("Quit", trayIconMenu);
     trayIconMenu->addAction(quitAction);
 
-    connect(trayIcon, &QSystemTrayIcon::activated, [this](){ this->show(); }); //click or double click the tray icon to show the main window
+    connect(trayIcon, &QSystemTrayIcon::activated, [this](){ this->showNormal(); }); //click or double click the tray icon to show the normal size of main window
     connect(startOnBootAction, &QAction::changed, this, &MainWindow::setStartOnBoot);
     connect(settingsAction, &QAction::triggered, this, &MainWindow::showSettings);
     connect(quitAction, &QAction::triggered, [this](){ trayIcon->setVisible(false); this->close(); });
