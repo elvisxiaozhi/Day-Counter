@@ -51,6 +51,7 @@ private slots:
     void editDate();
     void removeOldDate();
     void deleteDate();
+    void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void setStartOnBoot();
     void showSettings();
     void showAboutPage();

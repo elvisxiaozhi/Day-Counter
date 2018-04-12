@@ -91,7 +91,7 @@ void MainWindow::setTrayIcon()
     QAction *quitAction = new QAction("Quit", trayIconMenu);
     trayIconMenu->addAction(quitAction);
 
-    connect(trayIcon, &QSystemTrayIcon::activated, [this](){ this->showNormal(); }); //click or double click the tray icon to show the normal size of main window
+    connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::trayIconActivated);
     connect(startOnBootAction, &QAction::changed, this, &MainWindow::setStartOnBoot);
     connect(settingsAction, &QAction::triggered, this, &MainWindow::showSettings);
     connect(quitAction, &QAction::triggered, [this](){ trayIcon->setVisible(false); this->close(); });
@@ -257,6 +257,13 @@ void MainWindow::deleteDate()
     }
     showNewDate();
     AddDateWindow::writeXmlFile();
+}
+
+void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
+{
+    if(reason == 2 || reason == 3) { //tray icon was double clicked or clicked
+        this->showNormal(); //to show a normal size of the main window
+    }
 }
 
 void MainWindow::setStartOnBoot()
