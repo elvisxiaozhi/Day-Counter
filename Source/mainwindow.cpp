@@ -92,9 +92,9 @@ void MainWindow::setTrayIcon()
     trayIconMenu->addAction(quitAction);
 
     connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::trayIconActivated);
-    connect(startOnBootAction, &QAction::changed, this, &MainWindow::setStartOnBoot);
+    connect(startOnBootAction, &QAction::changed, this, &MainWindow::startOnBootActionChanged);
     connect(settingsAction, &QAction::triggered, this, &MainWindow::showSettings);
-    connect(quitAction, &QAction::triggered, [this](){ trayIcon->setVisible(false); this->close(); });
+    connect(quitAction, &QAction::triggered, [this](){ trayIcon->setVisible(false); this->close(); }); //note the program can be only closed by clicking "Quit" action
 }
 
 void MainWindow::makeDataFile()
@@ -128,9 +128,9 @@ int MainWindow::getLabelInfo()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if(trayIcon->isVisible()) {
-        event->ignore();
-        this->hide();
+    if(trayIcon->isVisible()) { //if tray icon can be seen in the task bar
+        event->ignore(); //then do not quit the program
+        this->hide(); //instead of closing the program, just hide the main window
     }
 }
 
@@ -266,16 +266,15 @@ void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
     }
 }
 
-void MainWindow::setStartOnBoot()
+void MainWindow::startOnBootActionChanged()
 {
-    qDebug() << startOnBootAction->isChecked();
-//    QSettings settings("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
-//    if(startOnBootAction->isChecked()) {
-//        settings.setValue("Day-Counter", QCoreApplication::applicationFilePath().replace('/', '\\'));
-//    }
-//    else {
-//        settings.deleteLater();
-//    }
+    QSettings settings("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
+    if(startOnBootAction->isChecked()) {
+        settings.setValue("Day-Counter", QCoreApplication::applicationFilePath().replace('/', '\\'));
+    }
+    else {
+        settings.remove("Day-Counter");
+    }
 }
 
 void MainWindow::showSettings()
