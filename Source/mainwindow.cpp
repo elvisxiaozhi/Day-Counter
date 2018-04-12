@@ -27,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent)
         showNewDate();
     }
 
+    lblVLayout = new QVBoxLayout; //must create this first, or the program will crash when adding the first date
+
     connect(&setDate, &AddDateWindow::newDateCreated, [this](){ delete lblVLayout; });
     connect(&setDate, &AddDateWindow::newDateCreated, this, &MainWindow::showNewDate);
     connect(&setDate, &AddDateWindow::dateHasEdit, this, &MainWindow::removeOldDate);
@@ -77,6 +79,12 @@ void MainWindow::setTrayIcon()
     startOnBootAction = new QAction("Start on Boot", trayIcon);
     trayIconMenu->addAction(startOnBootAction);
     startOnBootAction->setCheckable(true);
+    if(startOnBootAction->isChecked()) {
+        startOnBootAction->setChecked(true);
+    }
+    else {
+        startOnBootAction->setCheckable(false);
+    }
     QAction *settingsAction = new QAction("Settings", trayIconMenu);
     trayIconMenu->addAction(settingsAction);
 
