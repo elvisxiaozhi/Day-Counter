@@ -28,10 +28,10 @@ private:
     AddDateWindow setDate;
     QVector<Labels *> dateLabels;
     QSystemTrayIcon *trayIcon;
+    QAction *startOnBootAction;
     static const int MAX_NUMS = 5;
     static const QString colorBase[MAX_NUMS];
     void setLayout();
-    void setMenuBar();
     void setTrayIcon();
     static bool isDataFileEmpty();
     void makeDataFile();
@@ -51,6 +51,7 @@ private slots:
     void editDate();
     void removeOldDate();
     void deleteDate();
+    void setStartOnBoot();
     void showSettings();
     void showAboutPage();
 };

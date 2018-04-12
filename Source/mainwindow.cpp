@@ -7,6 +7,8 @@
 #include <QMenuBar>
 #include <QStatusBar>
 #include <QCloseEvent>
+#include <QSettings>
+#include <QCoreApplication>
 
 QString dataPath = "";
 QString userDataPath = "";
@@ -18,7 +20,6 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setLayout();
-    setMenuBar(); //must be below setLayout();
     setTrayIcon();
     makeDataFile();
     setDate.readXmlFile();
@@ -64,26 +65,36 @@ void MainWindow::setLayout()
     connect(addButtonLabel, &Labels::leftClicked, this, &MainWindow::leftClicked);
 }
 
-void MainWindow::setMenuBar()
-{
-    QMenu *settingsMenu = new QMenu(mainWidget);
-    settingsMenu = menuBar()->addMenu("Settings");
-    QMenu *aboutMenu = new QMenu(mainWidget);
-    aboutMenu = menuBar()->addMenu("About");
-    connect(settingsMenu, &QMenu::aboutToShow, this, &MainWindow::showSettings);
-    connect(aboutMenu, &QMenu::aboutToShow, this, &MainWindow::showAboutPage);
-}
-
 void MainWindow::setTrayIcon()
 {
     trayIcon = new QSystemTrayIcon(QIcon(":/add_button.png"), this);
-    QAction *quitAction = new QAction("Quit", trayIcon);
-    QMenu *trayIconMenu = new QMenu;
-    trayIconMenu->addAction(quitAction);
-    trayIcon->setContextMenu(trayIconMenu);
     trayIcon->show();
-    connect(quitAction, &QAction::triggered, [this](){ this->close(); });
+
+    QMenu *trayIconMenu = new QMenu;
+    trayIcon->setContextMenu(trayIconMenu);
+
+    startOnBootAction = new QAction("Start on Boot", trayIcon);
+    trayIconMenu->addAction(startOnBootAction);
+    startOnBootAction->setCheckable(true);
+    QAction *settingsAction = new QAction("Settings", trayIconMenu);
+    trayIconMenu->addAction(settingsAction);
+
+    QMenu *helpMenu = new QMenu("Help");
+    trayIconMenu->addMenu(helpMenu);
+    QAction *feedbackAction = new QAction("Feedback", helpMenu);
+    helpMenu->addAction(feedbackAction);
+    QAction *aboutAction = new QAction("About", helpMenu);
+    helpMenu->addAction(aboutAction);
+    QAction *donateAction = new QAction("Donate", helpMenu);
+    helpMenu->addAction(donateAction);
+
+    QAction *quitAction = new QAction("Quit", trayIconMenu);
+    trayIconMenu->addAction(quitAction);
+
     connect(trayIcon, &QSystemTrayIcon::activated, [this](){ this->show(); }); //click or double click the tray icon to show the main window
+    connect(startOnBootAction, &QAction::changed, this, &MainWindow::setStartOnBoot);
+    connect(settingsAction, &QAction::triggered, this, &MainWindow::showSettings);
+    connect(quitAction, &QAction::triggered, [this](){ trayIcon->setVisible(false); this->close(); });
 }
 
 void MainWindow::makeDataFile()
@@ -246,6 +257,18 @@ void MainWindow::deleteDate()
     }
     showNewDate();
     AddDateWindow::writeXmlFile();
+}
+
+void MainWindow::setStartOnBoot()
+{
+    qDebug() << startOnBootAction->isChecked();
+//    QSettings settings("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
+//    if(startOnBootAction->isChecked()) {
+//        settings.setValue("Day-Counter", QCoreApplication::applicationFilePath().replace('/', '\\'));
+//    }
+//    else {
+//        settings.deleteLater();
+//    }
 }
 
 void MainWindow::showSettings()
