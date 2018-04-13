@@ -74,9 +74,9 @@ void AddDateWindow::setLayout()
     connect(doneButton, &QPushButton::clicked, [this](){
         dateNamesVec.push_back(dateNameEdit->text());
         datesVec.push_back(dateEdit->date().toString("yyyy.MM.dd"));
-        writeXmlFile();
+        this->close();
+        emit newDateCreated();
     });
-    connect(doneButton, &QPushButton::clicked, [this](){ this->close(); emit newDateCreated(); });
 }
 
 void AddDateWindow::closeEvent(QCloseEvent *event)

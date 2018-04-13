@@ -27,9 +27,6 @@ MainWindow::MainWindow(QWidget *parent)
         showNewDate();
     }
 
-    lblVLayout = new QVBoxLayout; //must create this first, or the program will crash when adding the first date
-
-    connect(&setDate, &AddDateWindow::newDateCreated, [this](){ delete lblVLayout; });
     connect(&setDate, &AddDateWindow::newDateCreated, this, &MainWindow::showNewDate);
     connect(&setDate, &AddDateWindow::dateHasEdit, this, &MainWindow::removeOldDate);
     connect(&setTimer, &Timer::newDayHasCome, this, &MainWindow::updateDays);
@@ -182,6 +179,10 @@ void MainWindow::showNewDate()
 {
     noDateLabel->hide();
 
+    if(isDataFileEmpty() == false) {
+        delete lblVLayout;
+    }
+
     lblVLayout = new QVBoxLayout;
     mainVLayout->addLayout(lblVLayout);
 
@@ -214,6 +215,8 @@ void MainWindow::showNewDate()
     mainVLayout->addWidget(addButtonLabel);
 
     statusBar()->showMessage(QString::number(datesVec.size()) + " items");
+
+    AddDateWindow::writeXmlFile();
 }
 
 void MainWindow::dateMoveUp()
