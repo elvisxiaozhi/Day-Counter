@@ -27,6 +27,11 @@ MainWindow::MainWindow(QWidget *parent)
         showNewDate();
     }
 
+    connect(&setDate, &AddDateWindow::newDateCreated, [this](){
+        if(isDataFileEmpty() == false) {
+            delete lblVLayout; //lblVLayout has to be above showNewDate, it can not be in showNewDate
+        }
+    });
     connect(&setDate, &AddDateWindow::newDateCreated, this, &MainWindow::showNewDate);
     connect(&setDate, &AddDateWindow::dateHasEdit, this, &MainWindow::removeOldDate);
     connect(&setTimer, &Timer::newDayHasCome, this, &MainWindow::updateDays);
@@ -178,10 +183,6 @@ void MainWindow::leftClicked()
 void MainWindow::showNewDate()
 {
     noDateLabel->hide();
-
-    if(isDataFileEmpty() == false) {
-        delete lblVLayout;
-    }
 
     lblVLayout = new QVBoxLayout;
     mainVLayout->addLayout(lblVLayout);
