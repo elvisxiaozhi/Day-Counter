@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QSystemTrayIcon>
+#include <QSettings>
 #include "labels.h"
 #include "adddatewindow.h"
 #include "timer.h"
@@ -30,6 +31,7 @@ private:
     QVector<Labels *> dateLabels;
     QSystemTrayIcon *trayIcon;
     QAction *startOnBootAction;
+    QSettings *startOnBootSettings;
     Timer setTimer;
     static const int MAX_NUMS = 5;
     static const QString colorBase[MAX_NUMS];

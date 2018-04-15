@@ -7,8 +7,8 @@
 #include <QMenuBar>
 #include <QStatusBar>
 #include <QCloseEvent>
-#include <QSettings>
 #include <QCoreApplication>
+#include <QDesktopServices>
 
 QString dataPath = "";
 QString userDataPath = "";
@@ -74,6 +74,7 @@ void MainWindow::setTrayIcon()
 {
     trayIcon = new QSystemTrayIcon(QIcon(":/add_button.png"), this);
     trayIcon->show();
+    trayIcon->setToolTip("Day-Counter Beta 1.0");
 
     QMenu *trayIconMenu = new QMenu;
     trayIcon->setContextMenu(trayIconMenu);
@@ -81,12 +82,15 @@ void MainWindow::setTrayIcon()
     startOnBootAction = new QAction("Start on Boot", trayIcon);
     trayIconMenu->addAction(startOnBootAction);
     startOnBootAction->setCheckable(true);
-    if(startOnBootAction->isChecked()) {
+
+    startOnBootSettings = new QSettings("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
+    if(startOnBootSettings->contains("Day-Counter")) {
         startOnBootAction->setChecked(true);
     }
     else {
-        startOnBootAction->setCheckable(false);
+        startOnBootAction->setChecked(false);
     }
+
     QAction *settingsAction = new QAction("Settings", trayIconMenu);
     trayIconMenu->addAction(settingsAction);
 
@@ -94,6 +98,8 @@ void MainWindow::setTrayIcon()
     trayIconMenu->addMenu(helpMenu);
     QAction *feedbackAction = new QAction("Feedback", helpMenu);
     helpMenu->addAction(feedbackAction);
+    QAction *updateAction = new QAction("Update", helpMenu);
+    helpMenu->addAction(updateAction);
     QAction *aboutAction = new QAction("About", helpMenu);
     helpMenu->addAction(aboutAction);
     QAction *donateAction = new QAction("Donate", helpMenu);
@@ -104,6 +110,7 @@ void MainWindow::setTrayIcon()
 
     connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::trayIconActivated);
     connect(startOnBootAction, &QAction::changed, this, &MainWindow::startOnBootActionChanged);
+    connect(updateAction, &QAction::triggered, [this](){ QDesktopServices::openUrl(QUrl("https://github.com/elvisxiaozhi/Day-Counter/releases")); });
     connect(settingsAction, &QAction::triggered, this, &MainWindow::showSettings);
     connect(quitAction, &QAction::triggered, [this](){ trayIcon->setVisible(false); this->close(); }); //note the program can be only closed by clicking "Quit" action
 }
@@ -281,12 +288,11 @@ void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
 
 void MainWindow::startOnBootActionChanged()
 {
-    QSettings settings("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
     if(startOnBootAction->isChecked()) {
-        settings.setValue("Day-Counter", QCoreApplication::applicationFilePath().replace('/', '\\'));
+        startOnBootSettings->setValue("Day-Counter", QCoreApplication::applicationFilePath().replace('/', '\\'));
     }
     else {
-        settings.remove("Day-Counter");
+        startOnBootSettings->remove("Day-Counter");
     }
 }
 
